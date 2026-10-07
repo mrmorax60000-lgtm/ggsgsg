@@ -1,0 +1,17 @@
+name: build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q mod-is-not-working-template-1.21.1.zip
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.10.2 }
+      - run: cd ModIsNotWorking && gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod-is-not-working-template-1.21.1-jar
+          path: ModIsNotWorking/build/libs/mod-is-not-working-template-1.21.1-1.0.0.jar
